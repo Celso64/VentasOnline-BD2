@@ -1,8 +1,6 @@
 package org.ventas.model;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class Producto {
 
@@ -18,10 +16,10 @@ public class Producto {
 
     public Producto(String nombre, String descripcion, String marca, Double precio) {
         this.codigo = idCounter.getId();
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.nombre = Objects.requireNonNull(nombre);
+        this.descripcion = Objects.requireNonNull(descripcion);
         this.marca = new Marca(marca);
-        this.precio = precio;
+        this.precio = Objects.requireNonNull(precio);
     }
 
     public String getMarca() {
