@@ -6,6 +6,10 @@ public class Producto {
 
     private static final IdCounter<Long> idCounter = new LongCounter();
 
+    public Long getCodigo() {
+        return codigo;
+    }
+
     private final String nombre, descripcion;
 
     private final Long codigo;

@@ -21,27 +21,39 @@ public class TiendaService {
         this.productos = new Productos();
     }
 
-    public Long agregarCliente(String nombre, String apellido, String email, String DNI){
-        var nuevoCliente = new Cliente(nombre, apellido, email,DNI);
+    public Long agregarCliente(String nombre, String apellido, String email, String DNI) {
+        var nuevoCliente = new Cliente(nombre, apellido, email, DNI);
         this.clientes.agregarCliente(nuevoCliente);
         return nuevoCliente.getId();
     }
 
-    public Producto agregarProducto(String nombre, String descripcion, String nombreMarca, Double precio){
+    public Long agregarProducto(String nombre, String descripcion, String nombreMarca, Double precio) {
         var nuevoProducto = new Producto(nombre, descripcion, nombreMarca, precio);
         this.productos.agregarProducto(nuevoProducto);
-        return nuevoProducto;
+        return nuevoProducto.getCodigo();
     }
 
-    public Optional<Tarjeta> asociarTarjeta(Long idCliente, Integer numero, Integer codigoSeguridad, String fechaVencimiento, String MarcaTarjeta){
+    public Optional<Tarjeta> asociarTarjeta(Long idCliente, String numero, Integer codigoSeguridad, String fechaVencimiento, String MarcaTarjeta) {
         var nuevaTarjeta = new Tarjeta(numero, codigoSeguridad, fechaVencimiento, new MarcaTarjeta(fechaVencimiento));
         var cliente = clientes.buscarCliente(idCliente);
 
-        if(cliente.isPresent()){
+        if (cliente.isPresent()) {
             cliente.get().agregarTarjeta(nuevaTarjeta);
             return Optional.of(nuevaTarjeta);
         }
         return Optional.empty();
     }
+
+    public void agregarAlCarrito(Long idCliente, Long idProducto) {
+        var cliente = clientes.buscarCliente(idCliente);
+        var producto = productos.buscarProducto(idProducto);
+
+        if (cliente.isEmpty()) throw new IllegalArgumentException("El cliente no existe");
+        if (producto.isEmpty()) throw new IllegalArgumentException("El producto no existe");
+
+        carritos.agregarRegistro(cliente.get(), producto.get());
+    }
+
+
 
 }

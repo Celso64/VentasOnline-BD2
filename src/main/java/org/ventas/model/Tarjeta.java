@@ -2,6 +2,7 @@ package org.ventas.model;
 
 import org.ventas.model.util.CodigoSeguridadTarjeta;
 import org.ventas.model.util.FechaVencimientoTarjeta;
+import org.ventas.model.util.NumeroTarjeta;
 
 public class Tarjeta {
 
@@ -9,24 +10,24 @@ public class Tarjeta {
 
     private final Long id;
 
-    private final Integer numero, codigoSeguridad;
+    private final Integer codigoSeguridad;
 
-    private final String fechaVencimiento;
+    private final String numero, fechaVencimiento;
 
     private Double fondos;
 
     private MarcaTarjeta marca;
 
-    public Tarjeta(Integer numero, Integer codigoSeguridad, String fechaVencimiento, MarcaTarjeta marcaTarjeta) {
+    public Tarjeta(String numero, Integer codigoSeguridad, String fechaVencimiento, MarcaTarjeta marcaTarjeta) {
         this.id = idCounter.getId();
-        this.numero = numero;
+        this.numero = new NumeroTarjeta(numero).toString();
         this.codigoSeguridad = new CodigoSeguridadTarjeta(codigoSeguridad).toInteger();
         this.fechaVencimiento = new FechaVencimientoTarjeta(fechaVencimiento).toString();
         this.fondos = 0.0;
         this.marca = marcaTarjeta;
     }
 
-    public Tarjeta(Integer numero, Integer codigoSeguridad, String fechaVencimiento, MarcaTarjeta marcaTarjeta, Double fondos) {
+    public Tarjeta(String numero, Integer codigoSeguridad, String fechaVencimiento, MarcaTarjeta marcaTarjeta, Double fondos) {
         this(numero, codigoSeguridad, fechaVencimiento, marcaTarjeta);
         this.fondos = fondos;
     }
