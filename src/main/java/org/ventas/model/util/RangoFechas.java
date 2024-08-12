@@ -8,6 +8,7 @@ public class RangoFechas {
 
     public RangoFechas(LocalDate inicio, LocalDate fin) {
         if (inicio.isAfter(fin)) throw new IllegalArgumentException("La fecha de Inicio es mayor a la de Fin");
+        if(fin.isBefore(LocalDate.now())) throw new IllegalArgumentException("Descuento Vencido");
         this.inicio = inicio;
         this.fin = fin;
     }

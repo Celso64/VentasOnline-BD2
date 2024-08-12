@@ -19,7 +19,7 @@ public class DescuentoTest {
     private Tarjeta tarjeta;
 
     @BeforeEach
-    public void cargarDatos(){
+    public void cargarDatos() {
         tiendaService = new TiendaService();
         this.cliente = tiendaService.agregarCliente("Juan", "Perez", "juan@gmail.com", "23645125");
         this.producto = tiendaService.agregarProducto("Mochila", "XXL", "Acme", 200.0);
@@ -27,32 +27,31 @@ public class DescuentoTest {
         tiendaService.agregarAlCarrito(this.cliente, this.producto);
     }
 
-    // TODO Calcular el monto total del carrito seleccionado sin descuentos vigentes, pero con descuentos que ya caducaron.
-    //  - NOTA: NO DETECTA LA FECHA VENCIDA.
     @Test
-    public void descuentosVencidos(){
-        tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), "Acme");
-        var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
-        assertEquals(0.0, descuento);
+    public void descuentosVencidos() {
+        LocalDate inicio = LocalDate.of(2000, 1, 1);
+        LocalDate fin = LocalDate.of(2000, 11, 1);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> tiendaService.agregarDescuento(inicio, fin, "Acme"));
+        assertEquals("Descuento Vencido", exception.getMessage());
     }
 
 
     @Test
-    public void descuentosPorMarca(){
+    public void descuentosPorMarca() {
         tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), "Acme");
         var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
         assertEquals(190.0, descuento);
     }
 
     @Test
-    public void descuentosPorPago(){
+    public void descuentosPorPago() {
         tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), tarjeta);
         var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
         assertEquals(184.0, descuento);
     }
 
     @Test
-    public void descuentosPorPagoYMarca(){
+    public void descuentosPorPagoYMarca() {
         tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), "Acme");
         tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), tarjeta);
         var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
@@ -61,7 +60,7 @@ public class DescuentoTest {
 
     // TODO Verificar que no sea posible crear un descuento con fechas validez superpuestas.
     @Test
-    public void descuentosSuperpuestos(){
+    public void descuentosSuperpuestos() {
 
     }
 }
