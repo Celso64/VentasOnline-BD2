@@ -18,27 +18,26 @@ public class Descuentos {
     }
 
     public void agregarDescuento(DescuentoMarca descuento) {
+        Objects.requireNonNull(descuento);
         if (this.descuentoMarcas.containsKey(descuento.getMarca())) {
             this.descuentoMarcas
                     .get(descuento.getMarca()).add(descuento);
+
         } else {
+            var lista = new ArrayList<DescuentoMarca>();
+            lista.add(descuento);
             this.descuentoMarcas
-                    .put(descuento.getMarca(), new ArrayList<>())
-                    .add(descuento);
+                    .put(descuento.getMarca(), lista);
         }
     }
 
-    public Boolean agregarDescuento(DescuentoTarjeta descuento) {
-        try {
+    public void agregarDescuento(DescuentoTarjeta descuento) {
             Map<LocalDateTime, DescuentoTarjeta> marca = (this.descuentoTarjetas.containsKey(descuento.getMarca()))
                     ? this.descuentoTarjetas.get(descuento.getMarca())
                     : this.descuentoTarjetas.put(descuento.getMarca(), new TreeMap<>(LocalDateTime::compareTo));
 
-            marca.put(LocalDateTime.now(), descuento);
-            return TRUE;
-        } catch (NullPointerException e) {
-            return FALSE;
-        }
+        var m = descuentoTarjetas.get(descuento.getMarca());
+        m.put(LocalDateTime.now(), descuento);
     }
 
     public Double aplicarDescuentos(Collection<Producto> productos, Tarjeta tarjeta) {

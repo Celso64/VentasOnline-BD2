@@ -39,8 +39,13 @@ public abstract class Descuento {
      * @return El monto que se debe descontar para aplicar el descuento, 0.0 si el porcentaje esta fuera de rango (0-100)
      */
     protected Double calcularDescuento(Double original, Integer porcentaje) {
+        if (this.estaVencido()) throw new IllegalStateException("Descuento Vencido");
         if(porcentaje > 100 || porcentaje < 0) return 0.0;
-        Double descuentoCoef = 1.0 - (porcentaje / 100.0);
+        Double descuentoCoef = porcentaje / 100.0;
         return original * descuentoCoef;
+    }
+
+    private Boolean estaVencido(){
+        return this.fechaFin.isAfter(LocalDate.now());
     }
 }

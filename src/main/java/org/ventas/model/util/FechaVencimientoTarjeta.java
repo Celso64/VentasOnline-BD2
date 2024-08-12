@@ -7,22 +7,16 @@ public class FechaVencimientoTarjeta {
 
     private final String fechaVencimiento;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
-
 
     public FechaVencimientoTarjeta(String fechaVencimiento) {
-
-        try {
-            LocalDate fecha = LocalDate.parse(fechaVencimiento, formatter);
+            String patron = "dd/MM/yy";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(patron);
+            LocalDate fecha = LocalDate.parse("01/" + fechaVencimiento, formatter);
             LocalDate fechaActual = LocalDate.now();
 
             if (!fecha.isAfter(fechaActual)) throw new IllegalArgumentException("Tarjeta Vencida");
 
             this.fechaVencimiento = fechaVencimiento;
-
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Fecha/Formato Invalido");
-        }
     }
 
     @Override

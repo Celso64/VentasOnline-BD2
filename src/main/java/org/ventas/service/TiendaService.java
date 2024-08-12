@@ -3,6 +3,9 @@ package org.ventas.service;
 import org.ventas.model.*;
 import org.ventas.repository.*;
 
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class TiendaService {
@@ -33,8 +36,8 @@ public class TiendaService {
         return nuevoProducto.getCodigo();
     }
 
-    public Optional<Tarjeta> asociarTarjeta(Long idCliente, String numero, Integer codigoSeguridad, String fechaVencimiento, String MarcaTarjeta) {
-        var nuevaTarjeta = new Tarjeta(numero, codigoSeguridad, fechaVencimiento, new MarcaTarjeta(fechaVencimiento));
+    public Optional<Tarjeta> asociarTarjeta(Long idCliente, String numero, Integer codigoSeguridad, String fechaVencimiento, String marcaTarjeta) {
+        var nuevaTarjeta = new Tarjeta(numero, codigoSeguridad, fechaVencimiento, new MarcaTarjeta(marcaTarjeta));
         var cliente = clientes.buscarCliente(idCliente);
 
         if (cliente.isPresent()) {
@@ -54,6 +57,19 @@ public class TiendaService {
         carritos.agregarRegistro(cliente.get(), producto.get());
     }
 
+    public void agregarDescuento(LocalDate inicio, LocalDate fin, String nombreMarca){
+            var descuento = new DescuentoMarca(inicio, fin, new Marca(nombreMarca));
+            this.descuentos.agregarDescuento(descuento);
+    }
 
+    public void agregarDescuento(LocalDate inicio, LocalDate fin, Tarjeta tarjeta){
+            var descuento = new DescuentoTarjeta(inicio, fin, tarjeta);
+            this.descuentos.agregarDescuento(descuento);
+    }
+
+    public Double calcularDescuento(Long idCliente, Tarjeta tarjeta){
+        var carrito = this.carritos.getCarrito(idCliente);
+        return this.descuentos.aplicarDescuentos(carrito.getProductos(), tarjeta);
+    }
 
 }

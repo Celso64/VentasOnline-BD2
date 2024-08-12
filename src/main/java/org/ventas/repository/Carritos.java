@@ -21,17 +21,23 @@ public class Carritos {
     public void agregarRegistro(Cliente cliente, Producto producto){
         if (this.carritos.containsKey(cliente))throw new IllegalStateException("El cliente ya tiene carrito");
 
-        var nuevoCarrito = new Carrito();
+        var nuevoCarrito = new Carrito(cliente);
         nuevoCarrito.agregarProducto(producto);
         this.carritos.put(cliente, nuevoCarrito);
     }
 
     public Carrito getCarrito(Cliente cliente){
         var res = this.carritos.get(cliente);
-
         if (Objects.isNull(res)) throw new IllegalStateException("El cliente no tiene carrito");
-
         return res;
+    }
+
+    public Carrito getCarrito(Long idCliente){
+        var cliente = this.carritos.keySet().stream().filter(x -> x.equals(new Cliente(idCliente))).findFirst();
+
+        if (cliente.isEmpty()) throw new IllegalStateException("El cliente no tiene carrito");
+
+        return carritos.get(cliente.get());
     }
 
     public Double liquidarCarrito(Set<Descuento> descuentos){

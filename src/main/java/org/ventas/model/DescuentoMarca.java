@@ -9,7 +9,7 @@ public class DescuentoMarca extends Descuento {
 
     private final Marca marca;
 
-    protected DescuentoMarca(LocalDate fechaInicio, LocalDate fechaFin, Marca marca) {
+    public DescuentoMarca(LocalDate fechaInicio, LocalDate fechaFin, Marca marca) {
         super(fechaInicio, fechaFin, PORCENTAJE_DESCUENTO);
         this.marca = marca;
     }

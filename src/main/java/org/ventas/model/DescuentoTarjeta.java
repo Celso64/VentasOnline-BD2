@@ -9,7 +9,7 @@ public class DescuentoTarjeta extends Descuento {
 
     private final Tarjeta tarjeta;
 
-    protected DescuentoTarjeta(LocalDate fechaInicio, LocalDate fechaFin, Tarjeta tarjeta) {
+    public DescuentoTarjeta(LocalDate fechaInicio, LocalDate fechaFin, Tarjeta tarjeta) {
         super(fechaInicio, fechaFin, PORCENTAJE_DESCUENTO);
         this.tarjeta = tarjeta;
     }

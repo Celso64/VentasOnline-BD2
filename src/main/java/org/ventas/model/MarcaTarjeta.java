@@ -21,4 +21,9 @@ public class MarcaTarjeta {
     public int hashCode() {
         return Objects.hashCode(nombre);
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }
