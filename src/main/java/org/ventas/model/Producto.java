@@ -41,4 +41,12 @@ public class Producto {
     public Double getPrecio(){
         return this.precio;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
 }
