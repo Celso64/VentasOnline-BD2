@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Producto {
 
-    private static IdCounter<Long> idCounter = new LongCounter();
+    private static final IdCounter<Long> idCounter = new LongCounter();
 
     private final String nombre, descripcion;
 
