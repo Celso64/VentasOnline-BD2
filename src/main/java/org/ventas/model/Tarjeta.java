@@ -32,26 +32,35 @@ public class Tarjeta {
         this.fondos = fondos;
     }
 
-    public void agregarFondos(Double monto){
+    public void agregarFondos(Double monto) {
         if (monto > 0) throw new IllegalArgumentException("No se puede agregar monto negativo");
         this.fondos += monto;
     }
 
-    public void quitarFondos(Double monto){
+    public void quitarFondos(Double monto) {
         if (monto > 0) throw new IllegalArgumentException("No se puede quitar monto negativo");
-        if ((this.fondos-monto) < 0.0 )  throw new IllegalStateException("No hay sufientes fondos");
+        if ((this.fondos - monto) < 0.0) throw new IllegalStateException("No hay sufientes fondos");
         this.fondos -= monto;
     }
 
-    public Boolean esMarca(MarcaTarjeta marcaTarjeta){
+    public Boolean esMarca(MarcaTarjeta marcaTarjeta) {
         return this.marca.equals(marcaTarjeta);
     }
 
-    public Boolean esMarca(String marcaTarjeta){
+    public Boolean esMarca(String marcaTarjeta) {
         return this.marca.equals(new MarcaTarjeta(marcaTarjeta));
     }
 
     public MarcaTarjeta getMarca() {
         return marca;
+    }
+
+    @Override
+    public String toString() {
+        return "codigoSeguridad : " + codigoSeguridad +
+                ", numero : " + numero +
+                ", fechaVencimiento : " + fechaVencimiento +
+                ", fondos : " + fondos +
+                ", marca : " + marca;
     }
 }

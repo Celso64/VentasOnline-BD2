@@ -20,4 +20,9 @@ public class RangoFechas {
     public LocalDate getFin() {
         return fin;
     }
+
+    public Boolean seSuperpone(LocalDate inicio, LocalDate fin){
+        return (this.inicio.isBefore(fin) && this.fin.isAfter(inicio))
+                || (inicio.isBefore(this.fin) && fin.isAfter(this.inicio));
+    }
 }

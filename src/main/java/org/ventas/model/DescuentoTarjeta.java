@@ -22,4 +22,9 @@ public class DescuentoTarjeta extends Descuento {
     public Double calcularDescuento(Producto producto) {
         return super.calcularDescuento(producto.getPrecio(), PORCENTAJE_DESCUENTO);
     }
+
+    @Override
+    public String toString() {
+        return tarjeta.toString();
+    }
 }

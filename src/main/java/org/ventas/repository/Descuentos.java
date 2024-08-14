@@ -17,7 +17,17 @@ public class Descuentos {
         this.descuentoTarjetas = new HashMap<>();
     }
 
-    public void agregarDescuento(DescuentoMarca descuento) {
+    public void agregarDescuento(Descuento descuento){
+        List descMarca = this.descuentoMarcas.values().stream().findFirst().orElse(Collections.EMPTY_LIST);
+        List descTarjeta = this.descuentoTarjetas.values().stream().findFirst().orElse(Collections.EMPTY_MAP).values().stream().toList();
+
+        if(haySuperpuesto(descMarca, descuento)) throw new IllegalArgumentException("Plazo ocupado");
+
+        if(descuento instanceof DescuentoMarca) agregarDescuento((DescuentoMarca) descuento);
+        else if (descuento instanceof DescuentoTarjeta) agregarDescuento((DescuentoTarjeta) descuento);
+    }
+
+    private void agregarDescuento(DescuentoMarca descuento) {
         Objects.requireNonNull(descuento);
         if (this.descuentoMarcas.containsKey(descuento.getMarca())) {
             this.descuentoMarcas
@@ -31,7 +41,7 @@ public class Descuentos {
         }
     }
 
-    public void agregarDescuento(DescuentoTarjeta descuento) {
+    private void agregarDescuento(DescuentoTarjeta descuento) {
             Map<LocalDateTime, DescuentoTarjeta> marca = (this.descuentoTarjetas.containsKey(descuento.getMarca()))
                     ? this.descuentoTarjetas.get(descuento.getMarca())
                     : this.descuentoTarjetas.put(descuento.getMarca(), new TreeMap<>(LocalDateTime::compareTo));
@@ -67,5 +77,9 @@ public class Descuentos {
             if (clave.isPresent()) return descuento.get(clave.get()).calcularDescuento(producto);
         }
         return 0.0;
+    }
+
+    private Boolean haySuperpuesto(List<Descuento> descuentos, Descuento descuento){
+        return descuentos.stream().anyMatch(x -> x.estaSuperpuesto(descuento.getPeriodo()));
     }
 }

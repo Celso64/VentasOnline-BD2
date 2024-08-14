@@ -46,6 +46,16 @@ public abstract class Descuento {
     }
 
     private Boolean estaVencido(){
-        return this.fechaFin.isAfter(LocalDate.now());
+        return this.fechaFin.isBefore(LocalDate.now());
+    }
+
+    public Boolean estaSuperpuesto(RangoFechas rangoFechas){
+        return new RangoFechas(this.fechaInicio, this.fechaFin).seSuperpone(rangoFechas.getInicio(), rangoFechas.getFin());
+    }
+
+
+    public RangoFechas getPeriodo(){
+        return new RangoFechas(this.fechaInicio, this.fechaFin);
     }
 }
+

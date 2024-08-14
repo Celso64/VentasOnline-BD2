@@ -1,10 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.ventas.model.*;
 import org.ventas.service.TiendaService;
 
@@ -38,22 +35,22 @@ public class DescuentoTest {
 
     @Test
     public void descuentosPorMarca() {
-        tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), "Acme");
+        tiendaService.agregarDescuento(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 11, 1), "Acme");
         var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
         assertEquals(190.0, descuento);
     }
 
     @Test
     public void descuentosPorPago() {
-        tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), tarjeta);
+        tiendaService.agregarDescuento(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 11, 1), tarjeta);
         var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
         assertEquals(184.0, descuento);
     }
 
     @Test
     public void descuentosPorPagoYMarca() {
-        tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), "Acme");
-        tiendaService.agregarDescuento(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 11, 1), tarjeta);
+        tiendaService.agregarDescuento(LocalDate.of(2024, 6, 10), LocalDate.of(2024, 9, 10), "Acme");
+        tiendaService.agregarDescuento(LocalDate.of(2024, 10, 1), LocalDate.of(2024, 11, 1), tarjeta);
         var descuento = tiendaService.calcularDescuento(this.cliente, this.tarjeta);
         assertEquals(174.0, descuento);
     }

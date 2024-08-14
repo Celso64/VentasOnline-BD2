@@ -24,4 +24,9 @@ public class DescuentoMarca extends Descuento {
                 ? (super.calcularDescuento(producto.getPrecio(), PORCENTAJE_DESCUENTO))
                 : 0.0;
     }
+
+    @Override
+    public String toString() {
+        return marca.toString();
+    }
 }
