@@ -72,4 +72,8 @@ public class TiendaService {
         return this.descuentos.aplicarDescuentos(carrito.getProductos(), tarjeta);
     }
 
+   /* public Venta pagarCarrito(Long idCliente, Tarjeta tarjeta){
+
+    }*/
+
 }

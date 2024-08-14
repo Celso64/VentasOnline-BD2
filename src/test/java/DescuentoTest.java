@@ -12,16 +12,15 @@ public class DescuentoTest {
     private static TiendaService tiendaService;
 
     private Long cliente;
-    private Long producto;
     private Tarjeta tarjeta;
 
     @BeforeEach
     public void cargarDatos() {
         tiendaService = new TiendaService();
         this.cliente = tiendaService.agregarCliente("Juan", "Perez", "juan@gmail.com", "23645125");
-        this.producto = tiendaService.agregarProducto("Mochila", "XXL", "Acme", 200.0);
+        var producto = tiendaService.agregarProducto("Mochila", "XXL", "Acme", 200.0);
         this.tarjeta = tiendaService.asociarTarjeta(this.cliente, "654_456_654", 123, "10/24", "Naranja").get();
-        tiendaService.agregarAlCarrito(this.cliente, this.producto);
+        tiendaService.agregarAlCarrito(this.cliente, producto);
     }
 
     @Test
@@ -58,6 +57,10 @@ public class DescuentoTest {
     // TODO Verificar que no sea posible crear un descuento con fechas validez superpuestas.
     @Test
     public void descuentosSuperpuestos() {
-
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            tiendaService.agregarDescuento(LocalDate.of(2024, 6, 10), LocalDate.of(2024, 9, 10), "Acme");
+            tiendaService.agregarDescuento(LocalDate.of(2024, 6, 1), LocalDate.of(2024, 11, 1), tarjeta);
+        });
+        assertEquals("Plazo ocupado", exception.getMessage());
     }
 }
