@@ -1,8 +1,8 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import ar.unrn.tp.modelo.Tarjeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.ventas.model.*;
 import org.ventas.service.TiendaService;
 
 import java.time.LocalDate;

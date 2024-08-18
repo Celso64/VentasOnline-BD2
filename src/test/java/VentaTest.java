@@ -1,9 +1,6 @@
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.ventas.model.Tarjeta;
+import ar.unrn.tp.modelo.Tarjeta;
 import org.ventas.service.TiendaService;
 
 public class VentaTest {
@@ -25,6 +22,6 @@ public class VentaTest {
     // TODO Realizar el pago y verificar que se genere la venta u orden de pago.
     @Test
     public void generarVenta(){
-        //tiendaService.pagarCarrito(cliente, tarjeta);
+        tiendaService.pagarCarrito(cliente, tarjeta);
     }
 }
