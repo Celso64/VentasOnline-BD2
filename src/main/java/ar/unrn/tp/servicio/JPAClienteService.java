@@ -3,6 +3,7 @@ package ar.unrn.tp.servicio;
 import ar.unrn.tp.api.ClienteService;
 import ar.unrn.tp.modelo.Cliente;
 import ar.unrn.tp.modelo.Tarjeta;
+import ar.unrn.tp.servicio.utils.EntityUtil;
 
 import javax.persistence.TypedQuery;
 import java.util.List;

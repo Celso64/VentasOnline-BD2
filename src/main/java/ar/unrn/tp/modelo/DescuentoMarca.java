@@ -33,4 +33,8 @@ public class DescuentoMarca extends Descuento {
                 : 0.0;
     }
 
+    public Boolean esMarca(String marca) {
+        return this.marca.esMarca(marca);
+    }
+
 }

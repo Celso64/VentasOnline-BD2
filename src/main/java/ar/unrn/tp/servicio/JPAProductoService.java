@@ -4,6 +4,7 @@ import ar.unrn.tp.api.ProductoService;
 import ar.unrn.tp.modelo.Categoria;
 import ar.unrn.tp.modelo.Marca;
 import ar.unrn.tp.modelo.Producto;
+import ar.unrn.tp.servicio.utils.EntityUtil;
 
 import javax.persistence.TypedQuery;
 import java.util.List;

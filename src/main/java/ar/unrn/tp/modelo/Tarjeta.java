@@ -1,7 +1,5 @@
 package ar.unrn.tp.modelo;
 
-import ar.unrn.tp.modelo.util.CodigoSeguridadTarjeta;
-import ar.unrn.tp.modelo.util.FechaVencimientoTarjeta;
 import ar.unrn.tp.modelo.util.NumeroTarjeta;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +26,10 @@ public class Tarjeta {
         this.numero = new NumeroTarjeta(numero).toString();
         this.fondos = 0.0;
         this.marca = new MarcaTarjeta(marcaTarjeta).toString().toUpperCase();
+    }
+
+    public Tarjeta(String marca) {
+        this.marca = marca;
     }
 
     public Tarjeta(String numero, String marcaTarjeta, Double fondos) {

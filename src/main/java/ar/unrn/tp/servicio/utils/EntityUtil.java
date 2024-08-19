@@ -1,4 +1,4 @@
-package ar.unrn.tp.servicio;
+package ar.unrn.tp.servicio.utils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

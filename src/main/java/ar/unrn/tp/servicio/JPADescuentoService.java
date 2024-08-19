@@ -2,6 +2,7 @@ package ar.unrn.tp.servicio;
 
 import ar.unrn.tp.api.DescuentoService;
 import ar.unrn.tp.modelo.*;
+import ar.unrn.tp.servicio.utils.EntityUtil;
 
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;

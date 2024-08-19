@@ -22,4 +22,8 @@ public class Marca {
         if (nombre.isBlank()) throw new IllegalArgumentException("Nombre Vacio");
         this.nombre = nombre.toUpperCase();
     }
+
+    public Boolean esMarca(String marcaNombre) {
+        return this.nombre.equals(marcaNombre);
+    }
 }

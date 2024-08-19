@@ -26,10 +26,6 @@ public class DescuentoTarjeta extends Descuento {
         this.tarjeta = tarjeta;
     }
 
-    public String getMarca() {
-        return this.tarjeta.getMarca();
-    }
-
     @Override
     public Double calcularDescuento(Producto producto) {
         return super.calcularDescuento(producto.getPrecio(), super.getPorcentajeDescuento());
@@ -42,5 +38,9 @@ public class DescuentoTarjeta extends Descuento {
 
     public Double getPorcentajeDescuento() {
         return super.getPorcentajeDescuento();
+    }
+
+    public Boolean esMarca(String marcaTarjeta) {
+        return this.tarjeta.esMarca(marcaTarjeta);
     }
 }
