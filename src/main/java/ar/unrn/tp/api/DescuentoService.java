@@ -15,5 +15,7 @@ public interface DescuentoService {
     void crearDescuento(String marcaProducto, LocalDate fechaDesde, LocalDate
             fechaHasta, float porcentaje);
 
-    List<DescuentoTarjeta> listAllDescuentos();
+    List<Descuento> listAllDescuentos();
+
+    List<Descuento> listarPorMarcas(String marcaProducto, String marcaTarjeta);
 }

@@ -1,21 +1,22 @@
 package ar.unrn.tp.servicio;
 
 import ar.unrn.tp.api.DescuentoService;
-import ar.unrn.tp.modelo.Descuento;
-import ar.unrn.tp.modelo.DescuentoTarjeta;
-import ar.unrn.tp.modelo.Tarjeta;
+import ar.unrn.tp.modelo.*;
 
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JPADescuentoService implements DescuentoService {
 
-    EntityUtil<DescuentoTarjeta> descuentos = new EntityUtil<>();
+    EntityUtil<Descuento> descuentos = new EntityUtil<>();
+    EntityUtil<DescuentoTarjeta> descuentosTarjetas = new EntityUtil<>();
+    EntityUtil<DescuentoMarca> descuentosMarcas = new EntityUtil<>();
 
     @Override
     public void crearDescuentoSobreTotal(String marcaTarjeta, LocalDate fechaDesde, LocalDate fechaHasta, float porcentaje) {
-        descuentos.ejecutarTransaccion((em) -> {
+        descuentosTarjetas.ejecutarTransaccion((em) -> {
             TypedQuery<Tarjeta> tarjetaQuery = em.createQuery("select t from Tarjeta t where t.marca = :marca", Tarjeta.class);
             tarjetaQuery.setParameter("marca", marcaTarjeta);
             Tarjeta tarjeta = tarjetaQuery.getSingleResult();
@@ -26,14 +27,37 @@ public class JPADescuentoService implements DescuentoService {
 
     @Override
     public void crearDescuento(String marcaProducto, LocalDate fechaDesde, LocalDate fechaHasta, float porcentaje) {
-
+        descuentosMarcas.ejecutarTransaccion((em) -> {
+            TypedQuery<Marca> marcaQuery = em.createQuery("select m from Marca m where m.nombre= :nombre", Marca.class);
+            marcaQuery.setParameter("nombre", marcaProducto);
+            Marca marca = marcaQuery.getSingleResult();
+            DescuentoMarca nuevoDescuento = new DescuentoMarca(fechaDesde, fechaHasta, marca, (double) porcentaje);
+            em.persist(nuevoDescuento);
+        });
     }
 
     @Override
-    public List<DescuentoTarjeta> listAllDescuentos() {
+    public List<Descuento> listAllDescuentos() {
         return descuentos.ejecutarQuery((em) -> {
-            TypedQuery<DescuentoTarjeta> descuentoQuery = em.createQuery("select d from DescuentoTarjeta d", DescuentoTarjeta.class);
+            TypedQuery<Descuento> descuentoQuery = em.createQuery("select d from Descuento d", Descuento.class);
             return descuentoQuery.getResultList();
+        });
+    }
+
+    @Override
+    public List<Descuento> listarPorMarcas(String marcaProducto, String marcaTarjeta) {
+        return descuentos.ejecutarQuery((em) -> {
+            TypedQuery<DescuentoTarjeta> descuentoTQuery = em.createQuery("SELECT d FROM DescuentoTarjeta d where :marca IN d.tarjeta.id", DescuentoTarjeta.class);
+            descuentoTQuery.setParameter("marca", marcaTarjeta);
+
+            TypedQuery<DescuentoMarca> descuentoMQuery = em.createQuery("SELECT d FROM DescuentoMarca d where d.marca.nombre = :marca", DescuentoMarca.class);
+            descuentoMQuery.setParameter("marca", marcaProducto);
+
+            List<Descuento> descuentoList = new ArrayList<>();
+            descuentoList.addAll(descuentoTQuery.getResultList());
+            descuentoList.addAll(descuentoMQuery.getResultList());
+
+            return descuentoList;
         });
     }
 }

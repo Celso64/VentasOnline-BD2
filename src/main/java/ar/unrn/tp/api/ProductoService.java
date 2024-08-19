@@ -24,4 +24,6 @@ public interface ProductoService {
 
     //Devuelve todos los productos
     List<Producto> listarProductos();
+
+    List<Producto> buscarProductos(List<Long> idsProductos);
 }

@@ -3,10 +3,10 @@ package ar.unrn.tp.modelo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
@@ -14,6 +14,10 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 public class DescuentoTarjeta extends Descuento {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     private Tarjeta tarjeta;
 
@@ -31,15 +35,6 @@ public class DescuentoTarjeta extends Descuento {
         return super.calcularDescuento(producto.getPrecio(), super.getPorcentajeDescuento());
     }
 
-    @Override
-    public String toString() {
-        return "DescuentoTarjeta{" +
-                "tarjeta=" + tarjeta +
-                ", fechaInicio=" + fechaInicio +
-                ", fechaFin=" + fechaFin +
-                ", porcentajeDescuento=" + porcentajeDescuento +
-                '}';
-    }
 
     public void setPorcentajeDescuento(Double porcentajeDescuento) {
         super.setPorcentajeDescuento(porcentajeDescuento);

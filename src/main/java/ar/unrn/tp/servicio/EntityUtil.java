@@ -49,4 +49,22 @@ public class EntityUtil<T> {
         }
     }
 
+    public T ejecutarIndividualQuery(Function<EntityManager, T> bloqueDeCodigo) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction tx = entityManager.getTransaction();
+
+        try {
+            tx.begin();
+            var entidades = bloqueDeCodigo.apply(entityManager);
+            tx.commit();
+            return entidades;
+        } catch (Exception e) {
+            tx.rollback();
+            throw e;
+        } finally {
+            if (!Objects.isNull(entityManager) && entityManager.isOpen())
+                entityManager.close();
+        }
+    }
+
 }

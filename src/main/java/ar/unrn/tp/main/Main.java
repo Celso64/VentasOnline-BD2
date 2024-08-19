@@ -32,6 +32,8 @@ public class Main {
                 LocalDate.of(2024, 11, 1),
                 0.1f);
 
+        descuentoService.crearDescuento("NIKE", LocalDate.of(2024, 6, 1), LocalDate.of(2025, 1, 20), 0.15f);
+
         List<Marca> marcas = productoService.listMarcas();
         List<Categoria> categorias = productoService.listCategorias();
 
@@ -45,5 +47,6 @@ public class Main {
         productoService.listarProductos().forEach(System.out::println);
         descuentoService.listAllDescuentos().forEach(System.out::println);
 
+        descuentoService.listarPorMarcas("NIKE", "NARANJA");
     }
 }

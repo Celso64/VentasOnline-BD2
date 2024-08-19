@@ -20,4 +20,6 @@ public interface ClienteService {
 
     //Devuelve las tarjetas de un cliente específico
     List<Tarjeta> listarTarjetas(Long idCliente);
+
+    Cliente buscarCliente(Long idCliente);
 }

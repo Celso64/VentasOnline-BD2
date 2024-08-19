@@ -5,12 +5,19 @@ import ar.unrn.tp.modelo.util.RangoFechas;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
 @Data
 @NoArgsConstructor
 public abstract class Descuento {
 
+    @Id
+    @GeneratedValue
+    protected Long id;
     protected LocalDate fechaInicio, fechaFin;
     protected Double porcentajeDescuento;
 

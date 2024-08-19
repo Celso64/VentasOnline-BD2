@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -59,5 +60,9 @@ public class Cliente {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = new Email(email).toString();
+    }
+
+    public Optional<Tarjeta> getTarjeta(Long idTarjeta) {
+        return this.tarjetas.stream().filter(t -> t.tieneID(idTarjeta)).findFirst();
     }
 }

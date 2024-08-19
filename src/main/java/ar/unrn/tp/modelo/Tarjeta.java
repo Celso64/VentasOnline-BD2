@@ -50,4 +50,8 @@ public class Tarjeta {
         return this.marca.equals(marcaTarjeta);
     }
 
+    public Boolean tieneID(Long id) {
+        return this.id.equals(id);
+    }
+
 }

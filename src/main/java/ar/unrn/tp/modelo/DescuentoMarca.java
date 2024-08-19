@@ -1,31 +1,36 @@
 package ar.unrn.tp.modelo;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
+@EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
 public class DescuentoMarca extends Descuento {
 
-    private static final Double PORCENTAJE_DESCUENTO = 5.0;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    private final Marca marca;
+    private Marca marca;
 
-    public DescuentoMarca(LocalDate fechaInicio, LocalDate fechaFin, Marca marca) {
-        super(fechaInicio, fechaFin, PORCENTAJE_DESCUENTO);
+    public DescuentoMarca(LocalDate fechaInicio, LocalDate fechaFin, Marca marca, Double porcentaje) {
+        super(fechaInicio, fechaFin, porcentaje);
         this.marca = marca;
-    }
-
-    public Marca getMarca() {
-        return marca;
     }
 
     @Override
     public Double calcularDescuento(Producto producto) {
         return (true)
-                ? (super.calcularDescuento(producto.getPrecio(), PORCENTAJE_DESCUENTO))
+                ? (super.calcularDescuento(producto.getPrecio(), super.getPorcentajeDescuento()))
                 : 0.0;
     }
 
-    @Override
-    public String toString() {
-        return marca.toString();
-    }
 }

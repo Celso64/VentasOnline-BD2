@@ -59,4 +59,16 @@ public class JPAClienteService implements ClienteService {
             return tarjetas.getResultList();
         }));
     }
+
+    @Override
+    public Cliente buscarCliente(Long idCliente) {
+        return clientes.ejecutarIndividualQuery((em -> {
+            TypedQuery<Cliente> clientes = em.createQuery(
+                    "select c from Cliente c where c.id = :id",
+                    Cliente.class);
+            clientes.setParameter("id", idCliente);
+            clientes.getResultList().forEach(Object::toString); // Esto es para que me de el objeto completo. Como si estuviera EAGER LOAD.
+            return clientes.getSingleResult();
+        }));
+    }
 }
