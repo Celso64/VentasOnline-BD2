@@ -62,7 +62,7 @@ public class JPAClienteService implements ClienteService {
                     "select t from Cliente c join c.tarjetas t where c.id = :id",
                     Tarjeta.class);
             tarjetas.setParameter("id", idCliente);
-            tarjetas.getResultList().forEach(System.out::println);
+            tarjetas.getResultList().forEach(Object::toString);
             return tarjetas.getResultList();
         }));
     }

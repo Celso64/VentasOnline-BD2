@@ -43,8 +43,8 @@ public abstract class Descuento {
      */
     protected Double calcularDescuento(Double original, Double porcentaje) {
         if (this.estaVencido()) throw new IllegalStateException("Descuento Vencido");
-        if(porcentaje > 100 || porcentaje < 0) return 0.0;
-        return original * porcentaje;
+        if (porcentaje > 1.0 || porcentaje < 0.0) return 0.0;
+        return original * (1.0 - porcentaje);
     }
 
     private Boolean estaVencido(){

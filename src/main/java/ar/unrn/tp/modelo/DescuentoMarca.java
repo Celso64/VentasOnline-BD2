@@ -28,7 +28,7 @@ public class DescuentoMarca extends Descuento {
 
     @Override
     public Double calcularDescuento(Producto producto) {
-        return (true)
+        return (this.esMarca(producto.getMarca().getNombre()))
                 ? (super.calcularDescuento(producto.getPrecio(), super.getPorcentajeDescuento()))
                 : 0.0;
     }

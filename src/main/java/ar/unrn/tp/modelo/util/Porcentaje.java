@@ -10,7 +10,7 @@ public class Porcentaje {
     }
 
     public Double getCoeficiente(){
-        return this.porcentaje / 100.0;
+        return this.porcentaje;
     }
 
     private Boolean esMenor(Double numero) {

@@ -37,7 +37,7 @@ public class JPADescuentoService implements DescuentoService {
     public void crearDescuento(String marcaProducto, LocalDate fechaDesde, LocalDate fechaHasta, float porcentaje) {
         descuentosMarcas.ejecutarTransaccion((em) -> {
             TypedQuery<Marca> marcaQuery = em.createQuery("select m from Marca m where m.nombre= :nombre", Marca.class);
-            marcaQuery.setParameter("nombre", marcaProducto);
+            marcaQuery.setParameter("nombre", marcaProducto.toUpperCase());
             Marca marca = marcaQuery.getSingleResult();
             DescuentoMarca nuevoDescuento = new DescuentoMarca(fechaDesde, fechaHasta, marca, (double) porcentaje);
             em.persist(nuevoDescuento);
