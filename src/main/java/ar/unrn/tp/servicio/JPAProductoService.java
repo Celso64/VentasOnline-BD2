@@ -5,15 +5,22 @@ import ar.unrn.tp.modelo.Categoria;
 import ar.unrn.tp.modelo.Marca;
 import ar.unrn.tp.modelo.Producto;
 import ar.unrn.tp.servicio.utils.EntityUtil;
+import lombok.NonNull;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class JPAProductoService implements ProductoService {
 
-    EntityUtil<Producto> productos = new EntityUtil<>();
-    EntityUtil<Categoria> categorias = new EntityUtil<>();
-    EntityUtil<Marca> marcas = new EntityUtil<>();
+    private final EntityUtil<Producto> productos;
+    private final EntityUtil<Categoria> categorias;
+    private final EntityUtil<Marca> marcas;
+
+    public JPAProductoService(@NonNull EntityUtil<Producto> productos, @NonNull EntityUtil<Categoria> categorias, @NonNull EntityUtil<Marca> marcas) {
+        this.productos = productos;
+        this.categorias = categorias;
+        this.marcas = marcas;
+    }
 
     @Override
     public void crearMarca(String nombre) {

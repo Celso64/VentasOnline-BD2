@@ -1,22 +1,24 @@
-import static org.junit.jupiter.api.Assertions.*;
-
+import ar.unrn.servicio.utils.TestEntityUtil;
+import ar.unrn.tp.api.ClienteService;
+import ar.unrn.tp.servicio.JPAClienteService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.ventas.service.TiendaService;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClienteTest {
 
-    private static TiendaService tiendaService;
+    private static ClienteService clienteService;
 
     @BeforeAll
     public static void init() {
-        tiendaService = new TiendaService();
+        clienteService = new JPAClienteService(new TestEntityUtil<>(), new TestEntityUtil<>());
     }
 
     @Test
     public void crearClienteMalConEmailBien() {
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            tiendaService.agregarCliente(null, null, "juan@gmail.com", null);
+            clienteService.crearCliente(null, null, "juan@gmail.com", null);
         });
         assertNull(exception.getMessage());
     }
@@ -24,7 +26,7 @@ public class ClienteTest {
     @Test
     public void crearClienteMal() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            tiendaService.agregarCliente("Juan", "Perez", "juan.com", "35643654");
+            clienteService.crearCliente("Juan", "Perez", "juan.com", "35643654");
         });
         assertEquals("Email Invalido", exception.getMessage());
     }

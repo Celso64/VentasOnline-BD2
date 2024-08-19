@@ -10,6 +10,7 @@ import ar.unrn.tp.servicio.JPAClienteService;
 import ar.unrn.tp.servicio.JPADescuentoService;
 import ar.unrn.tp.servicio.JPAProductoService;
 import ar.unrn.tp.servicio.JPAVentaService;
+import ar.unrn.tp.servicio.utils.EntityUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,10 +18,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        ClienteService clientes = new JPAClienteService();
-        ProductoService productoService = new JPAProductoService();
-        DescuentoService descuentoService = new JPADescuentoService();
-        VentaService ventaService = new JPAVentaService();
+        ClienteService clientes = new JPAClienteService(new EntityUtil<>(), new EntityUtil<>());
+        ProductoService productoService = new JPAProductoService(new EntityUtil<>(), new EntityUtil<>(), new EntityUtil<>());
+        DescuentoService descuentoService = new JPADescuentoService(new EntityUtil<>(), new EntityUtil<>(), new EntityUtil<>());
+        VentaService ventaService = new JPAVentaService(clientes, productoService, descuentoService, new EntityUtil<>());
 
         clientes.crearCliente("Juan", "Perez", "56412320", "juan@gmail.com");
         clientes.agregarTarjeta(1L, "545 342 453 653", "NARANJA", 1_250_000.0);

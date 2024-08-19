@@ -3,6 +3,7 @@ package ar.unrn.tp.servicio;
 import ar.unrn.tp.api.DescuentoService;
 import ar.unrn.tp.modelo.*;
 import ar.unrn.tp.servicio.utils.EntityUtil;
+import lombok.NonNull;
 
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
@@ -11,9 +12,15 @@ import java.util.List;
 
 public class JPADescuentoService implements DescuentoService {
 
-    EntityUtil<Descuento> descuentos = new EntityUtil<>();
-    EntityUtil<DescuentoTarjeta> descuentosTarjetas = new EntityUtil<>();
-    EntityUtil<DescuentoMarca> descuentosMarcas = new EntityUtil<>();
+    private final EntityUtil<Descuento> descuentos;
+    private final EntityUtil<DescuentoTarjeta> descuentosTarjetas;
+    private final EntityUtil<DescuentoMarca> descuentosMarcas;
+
+    public JPADescuentoService(@NonNull EntityUtil<Descuento> descuentos, @NonNull EntityUtil<DescuentoTarjeta> descuentosTarjetas, @NonNull EntityUtil<DescuentoMarca> descuentosMarcas) {
+        this.descuentos = descuentos;
+        this.descuentosTarjetas = descuentosTarjetas;
+        this.descuentosMarcas = descuentosMarcas;
+    }
 
     @Override
     public void crearDescuentoSobreTotal(String marcaTarjeta, LocalDate fechaDesde, LocalDate fechaHasta, float porcentaje) {

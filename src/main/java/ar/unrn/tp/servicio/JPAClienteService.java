@@ -4,14 +4,20 @@ import ar.unrn.tp.api.ClienteService;
 import ar.unrn.tp.modelo.Cliente;
 import ar.unrn.tp.modelo.Tarjeta;
 import ar.unrn.tp.servicio.utils.EntityUtil;
+import lombok.NonNull;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class JPAClienteService implements ClienteService {
 
-    private final EntityUtil<Cliente> clientes = new EntityUtil<>();
-    private final EntityUtil<Tarjeta> tarjetas = new EntityUtil<>();
+    private final EntityUtil<Cliente> clientes;
+    private final EntityUtil<Tarjeta> tarjetas;
+
+    public JPAClienteService(@NonNull EntityUtil<Cliente> clientes, @NonNull EntityUtil<Tarjeta> tarjetas) {
+        this.clientes = clientes;
+        this.tarjetas = tarjetas;
+    }
 
     @Override
     public void crearCliente(String nombre, String apellido, String dni, String email) {

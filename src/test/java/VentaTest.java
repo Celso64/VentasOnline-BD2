@@ -1,7 +1,6 @@
+import ar.unrn.tp.modelo.Tarjeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ar.unrn.tp.modelo.Tarjeta;
-import org.ventas.service.TiendaService;
 
 public class VentaTest {
 

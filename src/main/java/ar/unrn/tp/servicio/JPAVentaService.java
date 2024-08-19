@@ -7,6 +7,7 @@ import ar.unrn.tp.api.VentaService;
 import ar.unrn.tp.modelo.*;
 import ar.unrn.tp.servicio.utils.DescuentosManager;
 import ar.unrn.tp.servicio.utils.EntityUtil;
+import lombok.NonNull;
 
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
@@ -16,10 +17,17 @@ import java.util.Objects;
 
 public class JPAVentaService implements VentaService {
 
-    ClienteService clienteService = new JPAClienteService();
-    ProductoService productoService = new JPAProductoService();
-    DescuentoService descuentoService = new JPADescuentoService();
-    EntityUtil<Venta> ventas = new EntityUtil<>();
+    private final ClienteService clienteService;
+    private final ProductoService productoService;
+    private final DescuentoService descuentoService;
+    private final EntityUtil<Venta> ventas;
+
+    public JPAVentaService(@NonNull ClienteService clienteService, @NonNull ProductoService productoService, @NonNull DescuentoService descuentoService, @NonNull EntityUtil<Venta> ventas) {
+        this.clienteService = clienteService;
+        this.productoService = productoService;
+        this.descuentoService = descuentoService;
+        this.ventas = ventas;
+    }
 
     @Override
     public void realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta) {
