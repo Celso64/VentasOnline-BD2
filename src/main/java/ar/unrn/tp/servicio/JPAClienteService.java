@@ -72,4 +72,9 @@ public class JPAClienteService implements ClienteService {
             return clientes.getSingleResult();
         }));
     }
+
+    @Override
+    public Tarjeta buscarTarjeta(Long idTarjeta) {
+        return tarjetas.ejecutarIndividualQuery((em) -> em.find(Tarjeta.class, idTarjeta));
+    }
 }

@@ -49,7 +49,23 @@ public class JPAVentaService implements VentaService {
 
     @Override
     public float calcularMonto(List<Long> productos, Long idTarjeta) {
-        return 0;
+        Tarjeta tarjeta = clienteService.buscarTarjeta(idTarjeta);
+
+        List<Producto> productoList = productoService.buscarProductos(productos);
+        DescuentosManager descuentos = new DescuentosManager(descuentoService.listAllDescuentos());
+
+        float total = 0.0f;
+        for (Producto p : productoList) {
+            DescuentoMarca descuentoMarca = descuentos.getDescuentoMarca(p.getMarca().getNombre());
+            DescuentoTarjeta descuentoTarjeta = descuentos.getDescuentoTarjeta(tarjeta.getMarca());
+
+            Double precio = (Objects.isNull(descuentoMarca)) ? p.getPrecio() : descuentoMarca.calcularDescuento(p);
+            precio = (Objects.isNull(descuentoTarjeta)) ? precio : descuentoTarjeta.calcularDescuento(p);
+
+            total += precio;
+        }
+
+        return total;
     }
 
     @Override

@@ -22,4 +22,6 @@ public interface ClienteService {
     List<Tarjeta> listarTarjetas(Long idCliente);
 
     Cliente buscarCliente(Long idCliente);
+
+    Tarjeta buscarTarjeta(Long idTarjeta);
 }
