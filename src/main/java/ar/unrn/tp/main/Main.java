@@ -20,7 +20,7 @@ public class Main {
 
         ClienteService clientes = new JPAClienteService(new EntityUtil<>(), new EntityUtil<>());
         ProductoService productoService = new JPAProductoService(new EntityUtil<>(), new EntityUtil<>(), new EntityUtil<>());
-        DescuentoService descuentoService = new JPADescuentoService(new EntityUtil<>(), new EntityUtil<>(), new EntityUtil<>());
+        DescuentoService descuentoService = new JPADescuentoService(new EntityUtil<>(), new EntityUtil<>(), new EntityUtil<>(), new EntityUtil<>());
         VentaService ventaService = new JPAVentaService(clientes, productoService, descuentoService, new EntityUtil<>());
 
         clientes.crearCliente("Juan", "Perez", "56412320", "juan@gmail.com");

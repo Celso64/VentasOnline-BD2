@@ -31,7 +31,7 @@ public class VentaTest {
         // Seteamos todos los servicios.
         clienteService = new JPAClienteService(new TestEntityUtil<>(), new TestEntityUtil<>());
         productoService = new JPAProductoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
-        descuentoService = new JPADescuentoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
+        descuentoService = new JPADescuentoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
         ventaService = new JPAVentaService(clienteService, productoService, descuentoService, new TestEntityUtil<>());
 
         //Cargamos datos.

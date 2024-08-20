@@ -39,7 +39,8 @@ public abstract class Descuento {
      * Calcula el monto que se debe descontar.
      * @param original : Monto sobre el que aplicar descuento.
      * @param porcentaje : Porcentaje del descuento.
-     * @return El monto que se debe descontar para aplicar el descuento, 0.0 si el porcentaje esta fuera de rango (0-100)
+     * @return El monto que se debe descontar para aplicar el descuento, 0.0 si el porcentaje esta fuera de rango
+     * [0.0;1.0]
      */
     protected Double calcularDescuento(Double original, Double porcentaje) {
         if (this.estaVencido()) throw new IllegalStateException("Descuento Vencido");

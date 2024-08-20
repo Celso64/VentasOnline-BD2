@@ -15,11 +15,13 @@ public class JPADescuentoService implements DescuentoService {
     private final EntityUtil<Descuento> descuentos;
     private final EntityUtil<DescuentoTarjeta> descuentosTarjetas;
     private final EntityUtil<DescuentoMarca> descuentosMarcas;
+    private final EntityUtil<Producto> productos;
 
-    public JPADescuentoService(@NonNull EntityUtil<Descuento> descuentos, @NonNull EntityUtil<DescuentoTarjeta> descuentosTarjetas, @NonNull EntityUtil<DescuentoMarca> descuentosMarcas) {
+    public JPADescuentoService(@NonNull EntityUtil<Descuento> descuentos, @NonNull EntityUtil<DescuentoTarjeta> descuentosTarjetas, @NonNull EntityUtil<DescuentoMarca> descuentosMarcas, @NonNull EntityUtil<Producto> productos) {
         this.descuentos = descuentos;
         this.descuentosTarjetas = descuentosTarjetas;
         this.descuentosMarcas = descuentosMarcas;
+        this.productos = productos;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class JPADescuentoService implements DescuentoService {
             descuentoTQuery.setParameter("marca", marcaTarjeta);
 
             TypedQuery<DescuentoMarca> descuentoMQuery = em.createQuery("SELECT d FROM DescuentoMarca d where d.marca.nombre = :marca", DescuentoMarca.class);
-            descuentoMQuery.setParameter("marca", marcaProducto);
+            descuentoMQuery.setParameter("marca", marcaProducto.toUpperCase());
 
             List<Descuento> descuentoList = new ArrayList<>();
             descuentoList.addAll(descuentoTQuery.getResultList());
@@ -67,5 +69,31 @@ public class JPADescuentoService implements DescuentoService {
 
             return descuentoList;
         });
+    }
+
+    @Override
+    public Double calcularDescuentoMarca(Long idProducto, String marca) {
+        Producto p = productos.ejecutarIndividualQuery((em) -> em.find(Producto.class, idProducto));
+        DescuentoMarca dm = descuentosMarcas.ejecutarIndividualQuery((em) -> {
+            TypedQuery<DescuentoMarca> marcaQuery = em.createQuery("SELECT d FROM DescuentoMarca d where d.marca.nombre = :marca", DescuentoMarca.class);
+            marcaQuery.setParameter("marca", marca.toUpperCase());
+            return marcaQuery.getResultList().stream().findFirst().get();
+        });
+        return dm.calcularDescuento(p);
+    }
+
+    @Override
+    public Double calcularDescuentoTarjeta(Long idProducto, Long idTarjeta) {
+        Producto p = productos.ejecutarIndividualQuery((em) -> em.find(Producto.class, idProducto));
+        DescuentoTarjeta dm = descuentosTarjetas.ejecutarIndividualQuery((em) -> {
+            TypedQuery<DescuentoTarjeta> tarjetaQuery = em.createQuery(
+                    "SELECT dt " +
+                            "FROM DescuentoTarjeta dt " +
+                            "WHERE dt.tarjeta.id = :idTarjeta"
+                    , DescuentoTarjeta.class);
+            tarjetaQuery.setParameter("idTarjeta", idTarjeta);
+            return tarjetaQuery.getResultList().stream().findFirst().get();
+        });
+        return dm.calcularDescuento(p);
     }
 }

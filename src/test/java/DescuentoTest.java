@@ -1,8 +1,13 @@
 import ar.unrn.servicio.utils.TestEntityUtil;
+import ar.unrn.tp.api.ClienteService;
 import ar.unrn.tp.api.DescuentoService;
+import ar.unrn.tp.api.ProductoService;
 import ar.unrn.tp.api.VentaService;
-import ar.unrn.tp.modelo.Tarjeta;
+import ar.unrn.tp.modelo.*;
+import ar.unrn.tp.servicio.JPAClienteService;
 import ar.unrn.tp.servicio.JPADescuentoService;
+import ar.unrn.tp.servicio.JPAProductoService;
+import ar.unrn.tp.servicio.JPAVentaService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,25 +18,36 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DescuentoTest {
 
+    private static ClienteService clienteService;
+    private static ProductoService productoService;
     private static DescuentoService descuentoService;
     private static VentaService ventaService;
 
-    private Long cliente;
-    private Tarjeta tarjeta;
+    private static Cliente cliente;
+    private static Tarjeta tarjeta;
 
     @BeforeAll
     public static void init() {
-        descuentoService = new JPADescuentoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
-    }
+        // Seteamos todos los servicios.
+        clienteService = new JPAClienteService(new TestEntityUtil<>(), new TestEntityUtil<>());
+        productoService = new JPAProductoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
+        descuentoService = new JPADescuentoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
+        ventaService = new JPAVentaService(clienteService, productoService, descuentoService, new TestEntityUtil<>());
 
-//    @BeforeEach
-//    public void cargarDatos() {
-//        descuentoService = new TiendaService();
-//        this.cliente = descuentoService.agregarCliente("Juan", "Perez", "juan@gmail.com", "23645125");
-//        var producto = descuentoService.agregarProducto("Mochila", "XXL", "Acme", 200.0);
-//        this.tarjeta = descuentoService.asociarTarjeta(this.cliente, "654_456_654", 123, "10/24", "Naranja").get();
-//        descuentoService.agregarAlCarrito(this.cliente, producto);
-//    }
+        //Cargamos datos.
+        clienteService.crearCliente("Juan", "Perez", "23645125", "juan@gmail.com");
+        cliente = clienteService.listarClientes().stream().findFirst().get();
+        clienteService.agregarTarjeta(cliente.getId(), "145 645 654 145", "NARANJA", 1_000_000.0);
+        tarjeta = clienteService.listarTarjetas(cliente.getId()).stream().findFirst().get();
+
+        productoService.crearMarca("Acme");
+        productoService.crearCategoria("Indumentaria");
+
+        Marca marca = productoService.listMarcas().stream().findFirst().get();
+        Categoria categoria = productoService.listCategorias().stream().findFirst().get();
+
+        productoService.crearProducto("Mochila", "XXL", 150_000.0f, categoria.getId(), marca.getId());
+    }
 
     @Test
     public void descuentosVencidos() {
@@ -42,20 +58,24 @@ public class DescuentoTest {
     }
 
 
-//    @Test
-//    public void descuentosPorMarca() {
-//        descuentoService.crearDescuento("Acme", LocalDate.of(2024, 1, 1), LocalDate.of(2024, 11, 1), 0.1f);
-//        var descuento = descuentoService.calcularDescuento(this.cliente, this.tarjeta);
-//        assertEquals(190.0, descuento);
-//    }
-//
-//    @Test
-//    public void descuentosPorPago() {
-//        descuentoService.agregarDescuento(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 11, 1), tarjeta);
-//        var descuento = descuentoService.calcularDescuento(this.cliente, this.tarjeta);
-//        assertEquals(184.0, descuento);
-//    }
-//
+    @Test
+    public void descuentosPorMarca() {
+        final float DESCUENTO = 0.1f;
+        Producto p = productoService.listarProductos().stream().findFirst().get();
+        descuentoService.crearDescuento("acme", LocalDate.of(2024, 6, 20), LocalDate.of(2024, 11, 20), DESCUENTO);
+        Double descuento = descuentoService.calcularDescuentoMarca(p.getId(), "Acme");
+        assertEquals((p.getPrecio() * (1.0 - DESCUENTO)), descuento);
+    }
+
+    @Test
+    public void descuentosPorPago() {
+        final float DESCUENTO = 0.2f;
+        Producto p = productoService.listarProductos().stream().findFirst().get();
+        descuentoService.crearDescuentoSobreTotal(tarjeta.getMarca(), LocalDate.of(2024, 1, 1), LocalDate.of(2024, 11, 1), DESCUENTO);
+        Double descuentoTarjeta = descuentoService.calcularDescuentoTarjeta(p.getId(), tarjeta.getId());
+        assertEquals(119999.99955296516, descuentoTarjeta);
+    }
+
 //    @Test
 //    public void descuentosPorPagoYMarca() {
 //        descuentoService.agregarDescuento(LocalDate.of(2024, 6, 10), LocalDate.of(2024, 9, 10), "Acme");

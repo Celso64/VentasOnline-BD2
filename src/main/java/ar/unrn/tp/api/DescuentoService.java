@@ -1,7 +1,6 @@
 package ar.unrn.tp.api;
 
 import ar.unrn.tp.modelo.Descuento;
-import ar.unrn.tp.modelo.DescuentoTarjeta;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,4 +17,8 @@ public interface DescuentoService {
     List<Descuento> listAllDescuentos();
 
     List<Descuento> listarPorMarcas(String marcaProducto, String marcaTarjeta);
+
+    Double calcularDescuentoMarca(Long idProducto, String marca);
+
+    Double calcularDescuentoTarjeta(Long idProducto, Long idTarjeta);
 }
