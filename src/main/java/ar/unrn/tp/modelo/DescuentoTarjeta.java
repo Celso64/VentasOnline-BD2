@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -42,5 +43,10 @@ public class DescuentoTarjeta extends Descuento {
 
     public Boolean esMarca(String marcaTarjeta) {
         return this.tarjeta.esMarca(marcaTarjeta);
+    }
+
+    @Override
+    public void agregarDescuentoTarjeta(List<DescuentoTarjeta> descuentoTarjetas) {
+        descuentoTarjetas.add(this);
     }
 }

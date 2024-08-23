@@ -24,6 +24,6 @@ public class Marca {
     }
 
     public Boolean esMarca(String marcaNombre) {
-        return this.nombre.equals(marcaNombre);
+        return this.nombre.equals(marcaNombre.toUpperCase());
     }
 }

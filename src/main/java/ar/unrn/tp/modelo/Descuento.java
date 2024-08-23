@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -59,6 +60,14 @@ public abstract class Descuento {
 
     public RangoFechas getPeriodo(){
         return new RangoFechas(this.fechaInicio, this.fechaFin);
+    }
+
+    public void agregarDescuentoTarjeta(List<DescuentoTarjeta> descuentoTarjetas) {
+        return;
+    }
+
+    public void agregarDescuentoMarca(List<DescuentoMarca> descuentoTarjetas) {
+        return;
     }
 }
 

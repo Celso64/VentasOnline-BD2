@@ -9,9 +9,11 @@ import ar.unrn.tp.servicio.JPADescuentoService;
 import ar.unrn.tp.servicio.JPAProductoService;
 import ar.unrn.tp.servicio.JPAVentaService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,6 +27,7 @@ public class DescuentoTest {
 
     private static Cliente cliente;
     private static Tarjeta tarjeta;
+    private static Producto producto;
 
     @BeforeAll
     public static void init() {
@@ -47,12 +50,14 @@ public class DescuentoTest {
         Categoria categoria = productoService.listCategorias().stream().findFirst().get();
 
         productoService.crearProducto("Mochila", "XXL", 150_000.0f, categoria.getId(), marca.getId());
+        producto = productoService.listarProductos().stream().findFirst().get();
     }
 
     @Test
+    @Order(1)
     public void descuentosVencidos() {
-        LocalDate inicio = LocalDate.of(2000, 1, 1);
-        LocalDate fin = LocalDate.of(2000, 11, 1);
+        LocalDate inicio = LocalDate.now().minusMonths(2);
+        LocalDate fin = LocalDate.now().minusMonths(1);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> descuentoService.crearDescuento("Acme", inicio, fin, 0.9f));
         assertEquals("Descuento Vencido", exception.getMessage());
     }
@@ -61,35 +66,43 @@ public class DescuentoTest {
     @Test
     public void descuentosPorMarca() {
         final float DESCUENTO = 0.1f;
-        Producto p = productoService.listarProductos().stream().findFirst().get();
-        descuentoService.crearDescuento("acme", LocalDate.of(2024, 6, 20), LocalDate.of(2024, 11, 20), DESCUENTO);
+        Producto p = producto;
+
+        LocalDate inicio = LocalDate.now().minusMonths(2);
+        LocalDate fin = LocalDate.now().plusMonths(2);
+
+        descuentoService.crearDescuento("acme", inicio, fin, DESCUENTO);
         Double descuento = descuentoService.calcularDescuentoMarca(p.getId(), "Acme");
         assertEquals((p.getPrecio() * (1.0 - DESCUENTO)), descuento);
     }
 
     @Test
+    @Order(2)
     public void descuentosPorPago() {
         final float DESCUENTO = 0.2f;
-        Producto p = productoService.listarProductos().stream().findFirst().get();
-        descuentoService.crearDescuentoSobreTotal(tarjeta.getMarca(), LocalDate.of(2024, 1, 1), LocalDate.of(2024, 11, 1), DESCUENTO);
+        Producto p = producto;
+
+        LocalDate inicio = LocalDate.now().minusMonths(2);
+        LocalDate fin = LocalDate.now().plusMonths(2);
+
+        descuentoService.crearDescuentoSobreTotal(tarjeta.getMarca(), inicio, fin, DESCUENTO);
         Double descuentoTarjeta = descuentoService.calcularDescuentoTarjeta(p.getId(), tarjeta.getId());
         assertEquals(119999.99955296516, descuentoTarjeta);
     }
 
-//    @Test
-//    public void descuentosPorPagoYMarca() {
-//        descuentoService.agregarDescuento(LocalDate.of(2024, 6, 10), LocalDate.of(2024, 9, 10), "Acme");
-//        descuentoService.agregarDescuento(LocalDate.of(2024, 10, 1), LocalDate.of(2024, 11, 1), tarjeta);
-//        var descuento = descuentoService.calcularDescuento(this.cliente, this.tarjeta);
-//        assertEquals(174.0, descuento);
-//    }
-//
-//    @Test
-//    public void descuentosSuperpuestos() {
-//        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-//            descuentoService.agregarDescuento(LocalDate.of(2024, 6, 10), LocalDate.of(2024, 9, 10), "Acme");
-//            descuentoService.agregarDescuento(LocalDate.of(2024, 6, 1), LocalDate.of(2024, 11, 1), tarjeta);
-//        });
-//        assertEquals("Plazo ocupado", exception.getMessage());
-//    }
+    @Test
+    @Order(3)
+    public void descuentosPorPagoYMarca() {
+        Float descuento = ventaService.calcularMonto(List.of(producto.getId()), tarjeta.getId());
+        assertEquals(150_000.0f, descuento);
+    }
+
+    @Test
+    public void descuentosSuperpuestos() {
+        Exception exception = assertThrows(com.objectdb.o._NoResultException.class, () -> {
+            descuentoService.crearDescuento("Paladini", LocalDate.of(2024, 6, 10), LocalDate.of(2024, 9, 10), 0.1f);
+            descuentoService.crearDescuento("Arcor", LocalDate.of(2024, 6, 1), LocalDate.of(2024, 11, 1), 0.1f);
+        });
+        assertEquals("No matching results for a unique query", exception.getMessage());
+    }
 }
