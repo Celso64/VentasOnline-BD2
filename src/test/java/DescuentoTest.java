@@ -20,26 +20,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DescuentoTest {
 
-    private static ClienteService clienteService;
-    private static ProductoService productoService;
     private static DescuentoService descuentoService;
     private static VentaService ventaService;
 
-    private static Cliente cliente;
     private static Tarjeta tarjeta;
     private static Producto producto;
 
     @BeforeAll
     public static void init() {
         // Seteamos todos los servicios.
-        clienteService = new JPAClienteService(new TestEntityUtil<>(), new TestEntityUtil<>());
-        productoService = new JPAProductoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
+        ClienteService clienteService = new JPAClienteService(new TestEntityUtil<>(), new TestEntityUtil<>());
+        ProductoService productoService = new JPAProductoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
         descuentoService = new JPADescuentoService(new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>(), new TestEntityUtil<>());
         ventaService = new JPAVentaService(clienteService, productoService, descuentoService, new TestEntityUtil<>());
 
         //Cargamos datos.
         clienteService.crearCliente("Juan", "Perez", "23645125", "juan@gmail.com");
-        cliente = clienteService.listarClientes().stream().findFirst().get();
+        Cliente cliente = clienteService.listarClientes().stream().findFirst().get();
         clienteService.agregarTarjeta(cliente.getId(), "145 645 654 145", "NARANJA", 1_000_000.0);
         tarjeta = clienteService.listarTarjetas(cliente.getId()).stream().findFirst().get();
 
